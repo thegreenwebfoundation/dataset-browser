@@ -1,0 +1,82 @@
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+/* overrides of the default app.css  */
+
+header, footer {
+  background-color: #FFFFFF;
+  color: #333;
+}
+
+footer a:link,
+footer a:visited,
+footer a:hover,
+footer a:focus,
+footer a:active,
+footer button.button-as-link {
+    color: #333;
+}
+header a:link,
+header a:visited,
+header a:hover,
+header a:focus,
+header a:active,
+header button.button-as-link {
+    color: #333;
+    text-decoration: none;
+}
+
+footer a:hover,
+footer a:focus,
+footer a:active,
+footer.button-as-link:hover,
+footer.button-as-link:focus,
+header a:hover,
+header a:focus,
+header a:active,
+button.button-as-link:hover,
+button.button-as-link:focus {
+	color: #333;
+}
+
+section.content{
+  margin: 0 2rem;
+}
+
+
+header p, footer p {
+  margin: 0 0 0 2rem;
+}
+
+
+/* styles for our branding nav  */
+
+nav.top-nav {
+  border-bottom: 1px solid #CECCCA;
+}
+nav.top-nav li a {
+  font-family: 'Lato', sans-serif;
+  color: #65B54C;
+}
+
+nav.top-nav ul {
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction: row;
+  list-style: none;
+
+}
+li.nav-logo {
+  flex-grow: 3;
+}
+
+li.nav-item {
+  list-style: none;
+  margin: 2rem;
+}
+
+a, .swagger-ui .info a {
+  color: #49ac4e;
+}

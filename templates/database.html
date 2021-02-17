@@ -1,0 +1,13 @@
+{% extends "default:database.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/overrides.css">
+{% endblock %}
+
+
+{% block title %} The Green Web Foundation - Dataset Browser - {{ database }} {% endblock %}
+
+{% block nav %}
+    {% include "partials/nav_menu.html" %}
+    {{ super() }}
+{% endblock %}

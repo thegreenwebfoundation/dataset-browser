@@ -1,0 +1,23 @@
+{% extends "default:table.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/overrides.css">
+{% endblock %}
+
+{% block title %}
+  The Green Web Foundation - Dataset Browser - {{ database }}: {{ table }}:
+
+  {% if filtered_table_rows_count or filtered_table_rows_count == 0 %}
+    {{ "{:,}".format(filtered_table_rows_count) }} row
+      {% if filtered_table_rows_count == 1 %}{% else %}s{% endif %}
+    {% endif %}
+
+  {% if human_description_en %}where {{ human_description_en }}{% endif %}
+
+{% endblock %}
+
+{% block nav %}
+    {% include "partials/nav_menu.html" %}
+    {{ super() }}
+{% endblock %}
+
