@@ -3,7 +3,7 @@
 
 
 upstream {{ tgwf_domain_name }} {
-    server localhost:{{ app_port }};
+    server 127.0.0.1:{{ app_port }};
 }
 
 server {
@@ -41,7 +41,13 @@ server {
         proxy_pass http://{{ tgwf_domain_name }};
     }
 
+
+    location / {
+        try_files $uri @proxy_to_app;
+    }
+
 }
+
 
 server {
     if ($host = {{ tgwf_domain_name }}.thegreenwebfoundation.org) {

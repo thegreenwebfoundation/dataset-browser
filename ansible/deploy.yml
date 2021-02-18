@@ -8,7 +8,7 @@
   vars:
     project_git_repo: "git@github.com:thegreenwebfoundation/dataset-browser.git"
     project_deploy_strategy: git
-    project_version: "master"
+    project_version: "main"
     project_local_path: "../"
     restart_supervisor: true
     supervisor_user: "deploy"
@@ -42,7 +42,7 @@
         dest: "{{ project_root }}/current/.env"
         state: link
 
-    - name: install pipenv and mariadb libraries for python
+    - name: make sure python is installed
       apt:
         pkg:
           - python3-venv
@@ -51,7 +51,7 @@
       become: yes
 
     - name: install python dependencies with pipenv
-      shell: "pipenv sync"
+      shell: "pipenv sync --three"
       args:
         chdir: "{{ project_root }}/current"
 
@@ -70,13 +70,13 @@
 
     - name: set up script for running app, via supervisor
       template:
-        src: "run_datasette.sh.j2"
-        dest: "{{ project_root }}/current/run_datasette.sh"
+        src: "run_dataset_browser.sh.j2"
+        dest: "{{ project_root }}/current/run_dataset_browser.sh"
       become: yes
 
     - name: set up supervisor entry for web
       template:
-        src: "supervisor.gunicorn.conf.j2"
+        src: "supervisor.dataset_browser.conf.j2"
         dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
       become: yes
 

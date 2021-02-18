@@ -1,2 +1,2 @@
 [prod]
-hel1.thegreenwebfoundation.org project_root="/var/www/{{ tgwf_domain_name }}.thegreenwebfoundation.org" tgwf_stage="prod" tgwf_domain_name=datasets app_port=8000
+hel1.thegreenwebfoundation.org project_root="/var/www/{{ tgwf_domain_name }}.thegreenwebfoundation.org" tgwf_stage="prod" tgwf_domain_name=datasets app_port=8001
