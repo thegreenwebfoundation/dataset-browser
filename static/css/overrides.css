@@ -1,8 +1,14 @@
 
 body {
   font-family: 'Lato', sans-serif;
+  background: #FFF;
 }
 /* overrides of the default app.css  */
+
+.intro {
+  max-width: 60rem;
+  margin-left: 2rem;
+}
 
 header, footer {
   background-color: #FFFFFF;

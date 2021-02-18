@@ -1,0 +1,94 @@
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/overrides.css">
+{% endblock %}
+
+
+{% include "partials/nav_menu.html" %}
+
+<style>
+
+.intro,
+.intro p {
+  font-size:1.3rem;
+}
+
+.intro li {
+  margin:1rem;
+  font-size:1.2rem;
+}
+
+tbody td {
+  padding:0.5rem;
+}
+</style>
+
+
+<main class="intro">
+
+<h2 id="working-with-the-green-web-open-datasets">Working with the Green Web Open Datasets</h2>
+<p>The Green Web Foundation regularly publishes a dataset of green domain names, and who hosts them. We refer to this as the <em>green domains</em> dataset. </p>
+<p>This data closely follows the data available over the Green Web API, and generally speaking, analysis you might use the green web API for, you can use the published datasets for, without needing to hit the API for each check.</p>
+<h3 id="understanding-the-dataset">Understanding the green_domains dataset</h3>
+<p>Every check of a website in the The Green Web Foundation platform is recorded in a table called greenchecks. As of Feburary 2021, this table is more than 3 billion rows long, so is rather unwieldy to work with.</p>
+<p>For this reason, the dataset we publish contains a smaller table, <code>greendomains</code>, listing the urls, and their status, with the columns below.</p>
+
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th >Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>id</em></td>
+<td >the id of the last check</td>
+</tr>
+<tr>
+<td><em>url</em></td>
+<td >the url checked</td>
+</tr>
+<tr>
+<td>_hosted<em>by</em></td>
+<td >the organisation hosting this site</td>
+</tr>
+<tr>
+<td>_hosted_by<em>website</em></td>
+<td >the website of the company providing the hosting for this site</td>
+</tr>
+<tr>
+<td><em>partner</em></td>
+<td >does this url belong to one of the web green web partner organisations</td>
+</tr>
+<tr>
+<td><em>green</em></td>
+<td >is this a green domain? 1 for yes, 0 for no.</td>
+</tr>
+<tr>
+<td>_hosted_by<em>id</em></td>
+<td >the id of the hosting company</td>
+</tr>
+<tr>
+<td><em>modified</em></td>
+<td >the time and date of the last check of this url</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-uses-of-this-dataset">Example uses of this dataset</h3>
+<p>Because this data provides similar data to the greencheck API, this dataset can work like an offline cache, where making API calls for each check either would either be too slow, or leak data about your users that you would not want to share.</p>
+<ul>
+<li><em>running local checks for privacy</em> - a build of the <a href="https://github.com/thegreenwebfoundation/searx/">privacy protecting search engine searx</a>, uses this, to avoid needing to leak information</li>
+<li><em>checking domains as part of development workflow</em> - tools which consume the green web foundation&#39;s green check API, like <a href="https://github.com/thegreenwebfoundation/lighthouse-plugin-greenhouse">Greenhouse</a>, or <a href="websitecarbon.com/">Website Carbon</a>, can use this to avoid being reliant on the Green Web API for running checks</li>
+<li><em>running analysis to understand how centralisation of the web changes over time</em> - because this dataset shows which organisations host each domain, you can get an idea of how the web is becoming more or less centralised, and flowing through fewer providers.</li>
+</ul>
+<h3 id="licensing-of-the-data">Licensing of the data</h3>
+<p>This dataset is releases under the <a href="https://opendatacommons.org/licenses/odbl/summary/index.html">Open Database Licence</a>.</p>
+<h3 id="getting-support-with-using-the-the-green-web-foundation-datasets">Getting support with using the the Green Web Foundation datasets</h3>
+<p>We provide limited, free support for using the Green Web Datasets we publish, and are happy to provide advice or answer questions about this data if you want to use it in classes or research.</p>
+<p>If you&#39;re interested in further analysis about the shift of the web away from fossil fuels, the Green Web Foundation has data going back to 2009, and we&#39;re happy to do collaborations. Get in touch at <a href="mailto:hello@thegreenwebfoundation">hello@thegreenwebfoundation<a/>, or <a href="https://www.thegreenwebfoundation.org/green-web-datasets/">visit our contact page for more ways to reach us<a/></p>
+
+
+</main>
+
