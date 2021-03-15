@@ -80,8 +80,15 @@
         dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
       become: yes
 
+    - name: trigger restart for app with supervisor
+      supervisorctl:
+        name: dataset_browser
+        state: restarted
+      become: yes
+
     - name: Reload nginx
       service:
         name: nginx
         state: reloaded
       become: yes
+
