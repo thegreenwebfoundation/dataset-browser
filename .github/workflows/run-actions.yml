@@ -19,9 +19,7 @@ jobs:
         run: sudo apt install ansible --yes
 
       - name: Add key to connect with ansible
-        run: |
-          cat $KEY_MATERIAL > deploy_keyfile
-          chmod 0600 deploy_keyfile
+        run: bash ansible/make_key_file_for_actions.sh
         env:
           KEY_MATERIAL: ${{ secrets.SSH_PRIVATE_KEY }}
 
