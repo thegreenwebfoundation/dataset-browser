@@ -23,7 +23,7 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           inventory: |
           options: |
-            --verbose
             --inventory inventories/prod
         env:
           BUCKET_NAME: tgwf-green-domains-live
+          ANSIBLE_STDOUT_CALLBACK: debug
