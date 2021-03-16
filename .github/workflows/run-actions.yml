@@ -17,15 +17,13 @@ jobs:
       with:
         python-version: 3.8.5
 
-    - name: Run playbook
-      uses: dawidd6/action-ansible-playbook@v2
+
+    - name: Play Ansible Playbook
+      uses: arillso/action.playbook@master
       with:
-        playbook: testing.yml
-        directory: ./
-        key: ${{secrets.SSH_PRIVATE_KEY}}
-        options: |
-          --verbose
-          -i ansible/inventories/prod
-        env:
-
-
+        private_key: ${{secrets.SSH_PRIVATE_KEY}}
+        playbook: ansible/playbook.yml
+        inventory: ansible/prod
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: 'false'
+        ANSIBLE_DEPRECATION_WARNINGS: 'false'
