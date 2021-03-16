@@ -29,5 +29,5 @@ jobs:
         ANSIBLE_DEPRECATION_WARNINGS: 'false'
 
     - name: tmate session to debug failure
-      if: $
+      if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
