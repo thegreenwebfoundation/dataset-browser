@@ -17,17 +17,12 @@ jobs:
       with:
         python-version: 3.8.5
 
-
     - name: Play Ansible Playbook
-      uses: arillso/action.playbook@master
+      uses: dawidd6/action-ansible-playbook@v2
       with:
-        private_key: ${{secrets.SSH_PRIVATE_KEY}}
-        playbook: ansible/playbook.yml
-        inventory: ansible/prod
+        playbook: ansible/testing.yml
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        options: |
+        -i ansible/inventories/prod
       env:
-        ANSIBLE_HOST_KEY_CHECKING: 'false'
-        ANSIBLE_DEPRECATION_WARNINGS: 'false'
-
-    - name: tmate session to debug failure
-      if: ${{ failure() }}
-      uses: mxschmitt/action-tmate@v3
+        BUCKET_NAME: "tgwf-green-domains-live"
