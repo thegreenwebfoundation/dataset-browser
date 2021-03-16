@@ -8,7 +8,7 @@ defaults:
     working-directory: ./
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,10 +18,12 @@ jobs:
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          playbook: testing.yml
+          playbook: deploy.yml
           directory: ./ansible
           key: ${{secrets.SSH_PRIVATE_KEY}}
           inventory: |
           options: |
             --verbose
             --inventory inventories/prod
+        env:
+          BUCKET_NAME: tgwf-green-domains-live
