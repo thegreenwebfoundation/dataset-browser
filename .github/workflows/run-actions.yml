@@ -3,26 +3,24 @@ name: Deploy
 on: [push]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8.5
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.5
 
-    - name: Play Ansible Playbook
-      uses: dawidd6/action-ansible-playbook@v2
-      with:
-        playbook: ansible/testing.yml
-        key: ${{secrets.SSH_PRIVATE_KEY}}
-        options: |
-        -i ansible/inventories/prod
-      env:
-        BUCKET_NAME: "tgwf-green-domains-live"
+      - name: Play Ansible Playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: ansible/testing.yml
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          options: |
+            -i ansible/inventories/prod
+        env:
+          BUCKET_NAME: "tgwf-green-domains-live"
