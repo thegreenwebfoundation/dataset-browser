@@ -14,7 +14,8 @@ jobs:
 
     - name: Set up python
       uses: actions/setup-python@v2
-      python-version: 3.8.5
+      with:
+        python-version: 3.8.5
 
     - name: Run playbook
       uses: dawidd6/action-ansible-playbook@v2
