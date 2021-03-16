@@ -30,7 +30,7 @@ jobs:
         working-directory: ./
 
       - name: Play Ansible Playbook
-        run: |
+        run: >
           ansible-playbook
           ansible/testing.yml
           -i ansible/inventories/prod
