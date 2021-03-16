@@ -18,6 +18,9 @@ jobs:
       - name: Make sure we have ansible installed
         run: sudo apt install ansible --yes
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Add key to connect with ansible
         run: bash ansible/create_key_file_for_actions.sh
         env:
