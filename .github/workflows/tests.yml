@@ -1,0 +1,25 @@
+name: Run Tests
+
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          pip install pipenv
+          pipenv install --dev
+
+      - name: Run tests
+        run: |
+          pipenv run "pytest -x"

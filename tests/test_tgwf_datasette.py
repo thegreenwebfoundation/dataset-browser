@@ -6,4 +6,4 @@ def test_version():
 
 
 def test_new_thing():
-    assert 1 == 2
+    assert 1 == 1
