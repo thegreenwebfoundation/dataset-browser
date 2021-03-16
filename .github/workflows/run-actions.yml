@@ -15,15 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Add private key to SSH agent, so ansible can use it
-        uses: webfactory/ssh-agent@v0.5.1
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Play Ansible Playbook
-        run: >
-          ansible-playbook
-          ansible/testing.yml
-          -i ansible/inventories/prod
-        env:
-          BUCKET_NAME: "tgwf-green-domains-live"
+          playbook: testing.yml
+          directory: ./ansible
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          inventory: |
+          options: |
+            --verbose
+            --inventory inventories/prod
