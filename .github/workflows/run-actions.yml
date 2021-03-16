@@ -15,6 +15,9 @@ jobs:
         with:
           python-version: 3.8.5
 
+      - name: Make sure we have ansible installed
+        run: sudo apt install ansible --yes
+
       - name: Play Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
