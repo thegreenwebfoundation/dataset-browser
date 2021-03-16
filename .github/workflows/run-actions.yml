@@ -1,0 +1,30 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up python
+      uses: actions/setup-python@v2
+      python-version: 3.8.5
+
+    - name: Run playbook
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: testing.yml
+        directory: ./
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        options: |
+          --verbose
+          -i ansible/inventories/prod
+        env:
+
+
