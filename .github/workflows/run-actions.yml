@@ -20,8 +20,8 @@ jobs:
         with:
           python-version: 3.8.5
 
-      - name: Make sure we have ansible installed
-        run: sudo apt install ansible --yes
+      - name: pip install ansible paramiko
+        run: python -m pip install paramiko ansible
 
       - name: Add key to connect with ansible
         run: bash ansible/create_keyfile_for_actions.sh
