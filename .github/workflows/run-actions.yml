@@ -22,6 +22,7 @@ jobs:
         run: bash ansible/create_key_file_for_actions.sh
         env:
           KEY_MATERIAL: ${{ secrets.SSH_PRIVATE_KEY }}
+        working-directory: ./
 
       - name: Play Ansible Playbook
         run: |
@@ -31,3 +32,4 @@ jobs:
           --key=file deploy_keyfile
         env:
           BUCKET_NAME: "tgwf-green-domains-live"
+        working-directory: ./
