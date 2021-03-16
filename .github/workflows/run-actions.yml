@@ -18,12 +18,18 @@ jobs:
       - name: Make sure we have ansible installed
         run: sudo apt install ansible --yes
 
+      - name: Add key to connect with ansible
+        run: |
+          cat $KEY_MATERIAL > deploy_keyfile
+          chmod 0600 deploy_keyfile
+        env:
+          KEY_MATERIAL: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Play Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: ansible/testing.yml
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          options: |
-            -i ansible/inventories/prod
+        run: |
+          ansible-playbook
+          ansible/testing.yml
+          -i ansible/inventories/prod
+          --key=file deploy_keyfile
         env:
           BUCKET_NAME: "tgwf-green-domains-live"
