@@ -34,7 +34,7 @@ jobs:
           ansible-playbook
           ansible/testing.yml
           -i ansible/inventories/prod
-          --key=file deploy_keyfile
+          --key deploy_keyfile
         env:
           BUCKET_NAME: "tgwf-green-domains-live"
         working-directory: ./
