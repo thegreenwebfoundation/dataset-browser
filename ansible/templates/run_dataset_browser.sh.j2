@@ -7,4 +7,5 @@ pipenv run make daily_snapshot.db
 # So we need to use exec to replace the parent shell script process
 # that starts pipenv. Otherwiser supervisor can not stop running processes,
 # as it only has the parent process id, not the one created by calling make
-exec pipenv run datasette ./daily_snapshot.db --template-dir=templates --static static:static
+# We add the time limit to allow for longer queries, instead of timing out so early
+exec pipenv run datasette ./daily_snapshot.db --template-dir=templates --static static:static --setting sql_time_limit_ms 3500
