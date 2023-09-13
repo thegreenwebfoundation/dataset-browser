@@ -1,3 +1,6 @@
+# MINIO_ALIAS is assumed to be an environment variable
+latest_key := $(shell mcli --json ls ${MINIO_ALIAS}/tgwf-green-domains-live/ | jq -s '.[-1].key')
+bucket := "tgwf-green-domains-live"
 
 serve: daily_snapshot.db
 	datasette ./daily_snapshot.db --template-dir=templates --static static:static
@@ -5,15 +8,11 @@ serve: daily_snapshot.db
 test.dev:
   # run pytest on every file to files matching .py
 	find . -name '*.py' | entr pytest
-
-SNAPSHOT_FILENAME := $(shell aws s3 ls s3://$(BUCKET_NAME) | cut -d " " -f 6   | tail -n 1)
-
-daily_snapshot.db: downloaded_snapshot
-	gunzip ./daily_snapshot.db.gz
-
+	
 downloaded_snapshot: cleared_snapshot
-	@echo FILENAME $(SNAPSHOT_FILENAME)
-	aws s3 cp s3://$(BUCKET_NAME)/$(SNAPSHOT_FILENAME) daily_snapshot.db.gz
+	echo "Downloading database snapshot from ${MINIO_ALIAS}/${bucket}/${latest_key}"
+
+	mcli cp $(MINIO_ALIAS)/${bucket}/${latest_key} daily_snapshot.db.gz
 
 cleared_snapshot:
 	rm -rf ./*.db

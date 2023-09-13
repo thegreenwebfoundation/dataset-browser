@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 datasette = "*"
 sqlite-utils = "*"
-awscli = "*"
-awscli-plugin-endpoint = "*"
+
 
 [dev-packages]
 pytest = "*"
+ansible = "*"
 
 [requires]
 python_version = "3.9"
