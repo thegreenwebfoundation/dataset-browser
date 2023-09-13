@@ -10,12 +10,15 @@
     project_deploy_strategy: git
     project_version: "main"
     project_local_path: "../"
-    restart_supervisor: true
-    supervisor_user: "deploy"
     project_unwanted_items:
       - .git
-
     project_finalize: true
+
+    restart_supervisor: true
+    supervisor_user: "deploy"
+    use_nginx: false
+    install_system_dependencies: false
+    install_python_dependencies: true
 
   roles:
     - f500.project_deploy
@@ -24,7 +27,7 @@
     - name: Set up directory structure for project_deploys, and env files
       block:
         - name: Set up directory for deploying app
-          ansible.builtins.file:
+          ansible.builtin.file:
             path: "/var/www/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
             state: directory
             mode: "0755"
@@ -33,42 +36,66 @@
           become: true
 
         - name: move .env file to shared directory
-          ansible.builtins.template:
+          ansible.builtin.template:
             src: "templates/dotenv.j2"
             dest: "{{ project_root }}/shared/.env"
           become: true
 
         - name: Link .env to shared directory
-          ansible.builtins.template:
+          ansible.builtin.file:
             src: "{{ project_root }}/shared/.env"
             dest: "{{ project_root }}/current/.env"
-          state: link
+            state: link
 
-    - name: Install required python dependencies
+    - name: Install required system dependencies
       block:
         - name: make sure python is installed
-          ansible.builtins.apt:
+          ansible.builtin.apt:
             pkg:
               - python3-venv
               - python3-dev
+              - jq
             state: present
           become: true
+      when: install_system_dependencies is true
 
-        - name: install python dependencies with pipenv
-          ansible.builtins.shell: "pipenv sync --three"
+    - name: Install required application dependencies
+      when: install_python_dependencies is true
+      block:
+        - name: Set up venv for pipenv to use. this is needed for the step below to work
+          # without creating the venv in .env, pipenv can't find the version
+          # of python or pip to use, and errors out
+          ansible.builtin.command: "python -m venv .venv"
           args:
             chdir: "{{ project_root }}/current"
+          changed_when: false
+
+        - name: Install latest version of pipenv
+          ansible.builtin.pip:
+            name: pipenv
+            virtualenv: "{{ project_root }}/current/.venv"
+
+        - name: Install python dependencies with pipenv
+          ansible.builtin.command: "python -m pipenv install" # noqa no-changed-when
+          args:
+            chdir: "{{ project_root }}/current"
+          environment:
+            # make sure we install in the project root.
+            # this way when we clear up old releases we also
+            # remove the deps.
+            # using env vars triggers the 'schema[playbook]', hence the noqa
+            PIPENV_VENV_IN_PROJECT: "1" # noqa schema[playbook]
 
     - name: Set up reverse proxy with nginx
       block:
         - name: Set up nginx server entry
-          ansible.builtins.template:
+          ansible.builtin.template:
             src: "nginx.conf.j2"
             dest: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
           become: true
 
         - name: Create a symbolic to make nginx file appear in sites-enabled
-          ansible.builtins.template:
+          ansible.builtin.template:
             src: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
             dest: "/etc/nginx/sites-enabled/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
             state: link
@@ -78,13 +105,13 @@
     - name: Set up supervisor for process management
       block:
         - name: Set up script for running app, via supervisor
-          ansible.builtins.template:
+          ansible.builtin.template:
             src: "run_dataset_browser.sh.j2"
             dest: "{{ project_root }}/current/run_dataset_browser.sh"
           become: true
 
         - name: Set up supervisor entry for web
-          ansible.builtins.template:
+          ansible.builtin.template:
             src: "supervisor.dataset_browser.conf.j2"
             dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
           become: true
@@ -92,13 +119,13 @@
     - name: Reload services
       block:
         - name: trigger restart for app with supervisor
-          ansible.builtins.supervisorctl:
+          ansible.builtin.supervisorctl:
             name: dataset_browser
-            state: restarted
+            state: started
           become: true
 
         - name: Reload nginx
-          ansible.builtins.service:
+          ansible.builtin.service:
             name: nginx
             state: reloaded
           become: true

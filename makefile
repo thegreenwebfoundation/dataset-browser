@@ -3,8 +3,8 @@
 
 latest_key := $(shell mcli --json ls ${MINIO_ALIAS}/tgwf-green-domains-live/ | jq -s '.[-1].key')
 
-serve: daily_snapshot.db
-	datasette ./daily_snapshot.db --template-dir=templates --static static:static --setting sql_time_limit_ms 10000
+serve: daily_snapshot.db 
+	datasette ./daily_snapshot.db --template-dir=templates --static static:static --setting sql_time_limit_ms 10000 -h 0.0.0.0
 
 test.dev:
   	# run pytest on every file to files matching .py
