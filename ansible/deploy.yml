@@ -3,7 +3,7 @@
   hosts:
     - all
   remote_user: "deploy"
-  become: no
+  become: false
 
   vars:
     project_git_repo: "git@github.com:thegreenwebfoundation/dataset-browser.git"
@@ -21,73 +21,85 @@
     - f500.project_deploy
 
   tasks:
-    - name: set up directory for deploying app
-      file:
-        path: "/var/www/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-        state: directory
-        mode: "0755"
-        owner: deploy
-        group: deploy
-      become: yes
+    - name: Set up directory structure for project_deploys, and env files
+      block:
+        - name: Set up directory for deploying app
+          ansible.builtins.file:
+            path: "/var/www/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
+            state: directory
+            mode: "0755"
+            owner: deploy
+            group: deploy
+          become: true
 
-    - name: move .env file to shared directory
-      template:
-        src: "templates/dotenv.j2"
-        dest: "{{ project_root }}/shared/.env"
-      become: yes
+        - name: move .env file to shared directory
+          ansible.builtins.template:
+            src: "templates/dotenv.j2"
+            dest: "{{ project_root }}/shared/.env"
+          become: true
 
-    - name: Link .env to shared directory
-      file:
-        src: "{{ project_root }}/shared/.env"
-        dest: "{{ project_root }}/current/.env"
-        state: link
+        - name: Link .env to shared directory
+          ansible.builtins.template:
+            src: "{{ project_root }}/shared/.env"
+            dest: "{{ project_root }}/current/.env"
+          state: link
 
-    - name: make sure python is installed
-      apt:
-        pkg:
-          - python3-venv
-          - python3-dev
-        state: present
-      become: yes
+    - name: Install required python dependencies
+      block:
+        - name: make sure python is installed
+          ansible.builtins.apt:
+            pkg:
+              - python3-venv
+              - python3-dev
+            state: present
+          become: true
 
-    - name: install python dependencies with pipenv
-      shell: "pipenv sync --three"
-      args:
-        chdir: "{{ project_root }}/current"
+        - name: install python dependencies with pipenv
+          ansible.builtins.shell: "pipenv sync --three"
+          args:
+            chdir: "{{ project_root }}/current"
 
-    - name: set up nginx server entry
-      template:
-        src: "nginx.conf.j2"
-        dest: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-      become: yes
+    - name: Set up reverse proxy with nginx
+      block:
+        - name: Set up nginx server entry
+          ansible.builtins.template:
+            src: "nginx.conf.j2"
+            dest: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
+          become: true
 
-    - name: Create a symbolic to make nginx file appear in sites-enabled
-      file:
-        src: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-        dest: "/etc/nginx/sites-enabled/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-        state: link
-      become: yes
+        - name: Create a symbolic to make nginx file appear in sites-enabled
+          ansible.builtins.template:
+            src: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
+            dest: "/etc/nginx/sites-enabled/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
+            state: link
+          become: true
+      when: use_nginx is true
 
-    - name: set up script for running app, via supervisor
-      template:
-        src: "run_dataset_browser.sh.j2"
-        dest: "{{ project_root }}/current/run_dataset_browser.sh"
-      become: yes
+    - name: Set up supervisor for process management
+      block:
+        - name: Set up script for running app, via supervisor
+          ansible.builtins.template:
+            src: "run_dataset_browser.sh.j2"
+            dest: "{{ project_root }}/current/run_dataset_browser.sh"
+          become: true
 
-    - name: set up supervisor entry for web
-      template:
-        src: "supervisor.dataset_browser.conf.j2"
-        dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
-      become: yes
+        - name: Set up supervisor entry for web
+          ansible.builtins.template:
+            src: "supervisor.dataset_browser.conf.j2"
+            dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
+          become: true
 
-    - name: trigger restart for app with supervisor
-      supervisorctl:
-        name: dataset_browser
-        state: restarted
-      become: yes
+    - name: Reload services
+      block:
+        - name: trigger restart for app with supervisor
+          ansible.builtins.supervisorctl:
+            name: dataset_browser
+            state: restarted
+          become: true
 
-    - name: Reload nginx
-      service:
-        name: nginx
-        state: reloaded
-      become: yes
+        - name: Reload nginx
+          ansible.builtins.service:
+            name: nginx
+            state: reloaded
+          become: true
+          when: use_nginx is true
