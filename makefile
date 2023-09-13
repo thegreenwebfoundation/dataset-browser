@@ -9,7 +9,10 @@ serve: daily_snapshot.db
 test.dev:
   	# run pytest on every file to files matching .py
 	find . -name '*.py' | entr pytest
-	
+
+daily_snapshot.db: downloaded_snapshot
+	gunzip ./daily_snapshot.db.gz
+
 downloaded_snapshot: cleared_snapshot
 	echo "Downloading database snapshot from ${MINIO_ALIAS}/${BUCKET_NAME}/${latest_key}"
 

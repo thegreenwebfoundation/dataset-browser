@@ -11,6 +11,3 @@ sqlite-utils = "*"
 [dev-packages]
 pytest = "*"
 ansible = "*"
-
-[requires]
-python_version = "3.9"
