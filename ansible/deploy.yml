@@ -13,6 +13,7 @@
     project_unwanted_items:
       - .git
     project_finalize: true
+    service_user: "deploy"
 
     restart_supervisor: true
     supervisor_user: "deploy"
@@ -35,10 +36,13 @@
             group: deploy
           become: true
 
-        - name: move .env file to shared directory
+        - name: Move .env file to shared directory
           ansible.builtin.template:
             src: "templates/dotenv.j2"
             dest: "{{ project_root }}/shared/.env"
+            owner: deploy
+            group: deploy
+            mode: "0755"
           become: true
 
         - name: Link .env to shared directory
@@ -48,6 +52,7 @@
             state: link
 
     - name: Install required system dependencies
+      when: install_system_dependencies is true
       block:
         - name: Make sure python is installed
           ansible.builtin.apt:
@@ -57,65 +62,46 @@
               - jq
             state: present
           become: true
-      when: install_system_dependencies is true
 
     - name: Install required application dependencies
+      ansible.builtin.command: "/home/deploy/.cargo/bin/uv sync" # noqa no-changed-when
+      args:
+        chdir: "{{ project_root }}/current"
       when: install_python_dependencies is true
-      block:
-        - name: Install python dependencies with uv
-          ansible.builtin.command: "uv sync" # noqa no-changed-when
-          args:
-            chdir: "{{ project_root }}/current"
 
-    - name: Set up reverse proxy with nginx
-      block:
-        - name: Set up nginx server entry
-          ansible.builtin.template:
-            src: "nginx.conf.j2"
-            dest: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-          become: true
+    - name: Set up systemd service for datasette
+      ansible.builtin.template:
+        src: "systemd.dataset_browser.service.j2"
+        dest: "/etc/systemd/system/dataset_browser.service"
+        owner: deploy
+        group: deploy
+        mode: "0755"
+      become: true
+      tags:
+        - systemd
+        - config
 
-        - name: Create a symbolic to make nginx file appear in sites-enabled
-          ansible.builtin.template:
-            src: "/etc/nginx/sites-available/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-            dest: "/etc/nginx/sites-enabled/{{ tgwf_domain_name }}.thegreenwebfoundation.org"
-            state: link
-          become: true
-      when: use_nginx is true
+    - name: Set up script for running app, via supervisor
+      ansible.builtin.template:
+        src: "run_dataset_browser.sh.j2"
+        dest: "{{ project_root }}/current/run_dataset_browser.sh"
+        owner: deploy
+        group: deploy
+        mode: "0755"
+      become: true
 
-    - name: Set up supervisor for process management
-      block:
-        - name: Set up script for running app, via supervisor
-          ansible.builtin.template:
-            src: "run_dataset_browser.sh.j2"
-            dest: "{{ project_root }}/current/run_dataset_browser.sh"
-          become: true
-
-        - name: Set up supervisor entry for web
-          ansible.builtin.template:
-            src: "supervisor.dataset_browser.conf.j2"
-            dest: "/etc/supervisor/conf.d/{{ tgwf_domain_name }}_web.conf"
-          become: true
-
-    - name: Reload services
-      block:
-        - name: trigger restart for app with supervisor
-          ansible.builtin.supervisorctl:
-            name: dataset_browser
-            state: started
-          become: true
-
-        - name: Reload nginx
-          ansible.builtin.service:
-            name: nginx
-            state: reloaded
-          become: true
-          when: use_nginx is true
+    - name: Reload systemd to pick up new changes
+      ansible.builtin.systemd:
+        daemon_reload: true
+      become: true
+      tags:
+        - systemd
+        - config
 
     - name: Check that website is serving requests on expected domains
       ansible.builtin.uri:
         url: "https://{{ tgwf_domain_name }}.{{ item }}"
-        return_content: yes
+        return_content: true
         status_code: 200
         timeout: 5
       loop:

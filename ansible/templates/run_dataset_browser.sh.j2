@@ -1,11 +1,13 @@
-# supervisor can only control processes it started itself.
+#! /usr/bin/bash
 
- # fetching the most recent version of our dataset like this, as a separate step
+# {{ ansible_managed }}
+# Last run: {{ template_run_date }}
+
+# fetch the most recent version of our dataset like this, as a separate step
 # use make to make sure we have a clean workspace, and all the dependencies sorted
-# pipenv run make daily_snapshot.db
+/usr/local/bin/just daily_snapshot
 
-# So we need to use exec to replace the parent shell script process
-# that starts pipenv. Otherwiser supervisor can not stop running processes,
-# as it only has the parent process id, not the one created by calling make
-# We add the time limit to allow for longer queries, instead of timing out so early
-exec just serve
+# calling `exec` here means that systemd sends a KILL command just
+# allowing for a graceful shutdown or reboot
+exec /home/deploy/.cargo/bin/uv run datasette . -h 0.0.0.0
+
