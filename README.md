@@ -2,7 +2,6 @@
 
 This is source code for the green web foundation datasets browser, visible at https://datasets.thegreenwebfoundation.org.
 
-
 This is a lightly modified  of the fantastic Datasette project, led by Simon Willison. If you have data you are interested in publishing, it's a fantastic tool.
 
 ## Installation
@@ -22,14 +21,14 @@ pipenv install
 ### Usage
 
 ```
-make serve
+just serve
 ```
 
 
 # Deploying
 
 ```
-make release
+just release
 ```
 
 # Contributing
