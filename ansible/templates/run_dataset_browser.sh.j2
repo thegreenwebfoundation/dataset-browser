@@ -8,4 +8,4 @@
 # that starts pipenv. Otherwiser supervisor can not stop running processes,
 # as it only has the parent process id, not the one created by calling make
 # We add the time limit to allow for longer queries, instead of timing out so early
-exec python -m pipenv run make serve
+exec just serve

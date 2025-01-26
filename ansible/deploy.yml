@@ -49,7 +49,7 @@
 
     - name: Install required system dependencies
       block:
-        - name: make sure python is installed
+        - name: Make sure python is installed
           ansible.builtin.apt:
             pkg:
               - python3-venv
@@ -62,29 +62,10 @@
     - name: Install required application dependencies
       when: install_python_dependencies is true
       block:
-        - name: Set up venv for pipenv to use. this is needed for the step below to work
-          # without creating the venv in .env, pipenv can't find the version
-          # of python or pip to use, and errors out
-          ansible.builtin.command: "python -m venv .venv"
+        - name: Install python dependencies with uv
+          ansible.builtin.command: "uv sync" # noqa no-changed-when
           args:
             chdir: "{{ project_root }}/current"
-          changed_when: false
-
-        - name: Install latest version of pipenv
-          ansible.builtin.pip:
-            name: pipenv
-            virtualenv: "{{ project_root }}/current/.venv"
-
-        - name: Install python dependencies with pipenv
-          ansible.builtin.command: "python -m pipenv install" # noqa no-changed-when
-          args:
-            chdir: "{{ project_root }}/current"
-          environment:
-            # make sure we install in the project root.
-            # this way when we clear up old releases we also
-            # remove the deps.
-            # using env vars triggers the 'schema[playbook]', hence the noqa
-            PIPENV_VENV_IN_PROJECT: "1" # noqa schema[playbook]
 
     - name: Set up reverse proxy with nginx
       block:
@@ -130,3 +111,13 @@
             state: reloaded
           become: true
           when: use_nginx is true
+
+    - name: Check that website is serving requests on expected domains
+      ansible.builtin.uri:
+        url: "https://{{ tgwf_domain_name }}.{{ item }}"
+        return_content: yes
+        status_code: 200
+        timeout: 5
+      loop:
+        - greenweb.org
+        - thegreenwebfoundation.org
