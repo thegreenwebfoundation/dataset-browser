@@ -1,6 +1,6 @@
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Archivo', sans-serif;
   background: #FFF;
 }
 /* overrides of the default app.css  */
@@ -62,7 +62,7 @@ nav.top-nav {
   border-bottom: 1px solid #CECCCA;
 }
 nav.top-nav li a {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Archivo', sans-serif;
   color: #65B54C;
 }
 
@@ -72,10 +72,20 @@ nav.top-nav ul {
   display:flex;
   flex-direction: row;
   list-style: none;
-
 }
 li.nav-logo {
   flex-grow: 3;
+
+}
+li.nav-logo img {
+  margin-left: 2rem;
+  margin-top: 1.5rem;
+  width: 200px;
+}
+body.table-greendomain li.nav-logo img {
+  margin-left: 1rem;
+  margin-top: 1rem;
+  width: 200px;
 }
 
 li.nav-item {
