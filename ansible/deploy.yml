@@ -17,9 +17,9 @@
 
     restart_supervisor: true
     supervisor_user: "deploy"
-    use_nginx: false
     install_system_dependencies: false
     install_python_dependencies: true
+    check_site_available: false
 
   roles:
     - f500.project_deploy
@@ -99,6 +99,7 @@
         - config
 
     - name: Check that website is serving requests on expected domains
+      when: check_site_available is true
       ansible.builtin.uri:
         url: "https://{{ tgwf_domain_name }}.{{ item }}"
         return_content: true
@@ -107,3 +108,6 @@
       loop:
         - greenweb.org
         - thegreenwebfoundation.org
+      tags:
+        - smoke-test
+        - config

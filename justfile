@@ -35,8 +35,8 @@ downloaded_snapshot: cleared_snapshot
 cleared_snapshot:
 	rm -rf ./*.db
 
-release:
-	uv run ansible-playbook ansible/deploy.yml -i ansible/inventories/prod.yml
+release *options:
+	uv run ansible-playbook ansible/deploy.yml -i ansible/inventories/prod.yml {{ options }}
 
 release_check:
 	uv run ansible-playbook ansible/deploy.yml -i ansible/inventories/prod.yml --check
