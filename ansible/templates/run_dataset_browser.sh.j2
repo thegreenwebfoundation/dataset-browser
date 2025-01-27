@@ -3,11 +3,13 @@
 # {{ ansible_managed }}
 # Last run: {{ template_run_date }}
 
+{% if fetch_new_snapshot is true %}
 # fetch the most recent version of our dataset like this, as a separate step
 # use make to make sure we have a clean workspace, and all the dependencies sorted
 /usr/local/bin/just daily_snapshot
+{% endif %}
 
 # calling `exec` here means that systemd sends a KILL command just
 # allowing for a graceful shutdown or reboot
-exec /home/deploy/.cargo/bin/uv run datasette . -h 0.0.0.0
+exec .venv/bin/datasette . -h 0.0.0.0
 

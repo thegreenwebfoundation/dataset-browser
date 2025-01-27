@@ -14,11 +14,12 @@
       - .git
     project_finalize: true
     service_user: "deploy"
-
-    restart_supervisor: true
     supervisor_user: "deploy"
     install_system_dependencies: false
     install_python_dependencies: true
+    # set this to true this to make sure the run script fetches 
+    # the latest snapshot of the dataset from object storage
+    fetch_new_snapshot: true
     check_site_available: false
 
   roles:
@@ -81,7 +82,7 @@
         - systemd
         - config
 
-    - name: Set up script for running app, via supervisor
+    - name: Set up script for running app via systemd
       ansible.builtin.template:
         src: "run_dataset_browser.sh.j2"
         dest: "{{ project_root }}/current/run_dataset_browser.sh"
@@ -89,6 +90,9 @@
         group: deploy
         mode: "0755"
       become: true
+      tags:
+        - systemd
+        - run_script
 
     - name: Reload systemd to pick up new changes
       ansible.builtin.systemd:
