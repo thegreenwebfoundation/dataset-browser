@@ -10,6 +10,16 @@ body {
   margin-left: 2rem;
 }
 
+.intro p{
+  font-size: 1.3rem;
+ }
+
+.intro hr {
+  color: #ddd;
+  margin-top:2rem;
+  margin-bottom:2rem;
+}
+
 header, footer {
   background-color: #FFFFFF;
   color: #333;
