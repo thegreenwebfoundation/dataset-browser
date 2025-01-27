@@ -30,6 +30,9 @@ test_dev:
 	# run pytest on every file to files matching .py
 	find . -name '*.py' | entr pytest
 
+# clear all the local databases and download the latest snapshots
+all_dataset_dbs: daily_snapshot real_time_cloud_csvs real_time_cloud_db
+
 # fetch  the latest real time cloud dataset snapshots from object storage
 real_time_cloud_csvs:
 	mcli cp ${MINIO_ALIAS}/${RTC_BUCKET_NAME}/realtimecloud/cloud_region_metadata.b890188.csv cloud_region_metadata.csv
