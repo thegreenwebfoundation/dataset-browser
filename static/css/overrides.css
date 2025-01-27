@@ -20,6 +20,15 @@ body {
   margin-bottom:2rem;
 }
 
+.gsf-license {
+  padding: 1rem;
+  background-color: hsl(54, 76%, 90%);
+}
+
+.gsf-license p {
+  font-size:1.0rem;
+}
+
 header, footer {
   background-color: #FFFFFF;
   color: #333;
