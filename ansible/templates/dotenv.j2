@@ -2,4 +2,5 @@
 # Last run: {{ template_run_date }}
 PYTHONDONTWRITEBYTECODE=1
 BUCKET_NAME={{ lookup('env', 'BUCKET_NAME') }}
+RTC_BUCKET_NAME={{ lookup('env', 'RTC_BUCKET_NAME') }}
 MINIO_ALIAS={{ lookup('env', 'MINIO_ALIAS') }}
