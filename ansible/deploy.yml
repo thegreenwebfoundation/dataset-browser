@@ -17,9 +17,6 @@
     supervisor_user: "deploy"
     install_system_dependencies: false
     install_python_dependencies: true
-    # set this to true this to make sure the run script fetches 
-    # the latest snapshot of the dataset from object storage
-    fetch_new_snapshot: true
     check_site_available: false
 
   roles:
@@ -64,6 +61,21 @@
             state: present
           become: true
 
+    - name: Download uv install script
+      ansible.builtin.get_url:
+        url: "https://astral.sh/uv/install.sh"
+        dest: "/tmp/uv.install.sh"
+        mode: "0755"
+      when: install_system_dependencies is true
+      tags: [uv-install]
+
+    - name: Install uv for managing python dependencies
+      ansible.builtin.shell: "bash /tmp/uv.install.sh"
+      args:
+        creates: "/home/deploy/.cargo/bin/uv"
+      when: install_system_dependencies is true
+      tags: [uv-install]
+
     - name: Install required application dependencies
       ansible.builtin.command: "/home/deploy/.cargo/bin/uv sync" # noqa no-changed-when
       args:
@@ -93,6 +105,27 @@
       tags:
         - systemd
         - run_script
+
+    - name: Setup script to periodically refresh datasets
+      ansible.builtin.template:
+        src: "refresh_datasets.sh.j2"
+        dest: "{{project_root}}/current/refresh_datasets.sh"
+        owner: deploy
+        group: deploy
+        mode: "0755"
+      become: true
+      tags: [crontab]
+
+    - name: Setup cronjob to periodically refresh datasets
+      ansible.builtin.cron:
+        name: "every day at 5am refresh the datasets"
+        state: "present"
+        weekday: "*"
+        hour: "5" # The database dump is taken at 1.30 am daily, so this is timed to take place after that ends.
+        minute: "0"
+        user: deploy
+        job: "cd {{project_root}}/current && ./refresh_datasets.sh 2>&1 | logger -t refresh_datasets"
+      tags: [crontab]
 
     - name: Reload systemd to pick up new changes
       ansible.builtin.systemd:
