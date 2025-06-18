@@ -4,7 +4,7 @@ set dotenv-load
 
 # list all the available commands
 default:
-  just --list
+	just --list
 
 latest_key := `mcli --json ls ${MINIO_ALIAS}/tgwf-green-domains-live/ | jq -s '.[-1].key'`
 
@@ -35,18 +35,18 @@ all_dataset_dbs: daily_snapshot real_time_cloud_csvs real_time_cloud_db
 
 # fetch  the latest real time cloud dataset snapshots from object storage
 real_time_cloud_csvs:
-	mcli cp ${MINIO_ALIAS}/${RTC_BUCKET_NAME}/realtimecloud/cloud_region_metadata.b890188.csv cloud_region_metadata.csv
-	mcli cp ${MINIO_ALIAS}/${RTC_BUCKET_NAME}/realtimecloud/cloud_region_metadata_dev.aa905b1.csv cloud_region_metadata_dev.csv
+	wget https://github.com/Green-Software-Foundation/real-time-cloud/archive/refs/tags/v1.0.tar.gz -O /tmp/real-time-cloud.tar.gz
+	mkdir -p /tmp/real-time-cloud
+	tar -xzvf /tmp/real-time-cloud.tar.gz --strip-components 1 -C /tmp/real-time-cloud
+	mv /tmp/real-time-cloud/Cloud_Region_Metadata.csv cloud_region_metadata.csv
 
 # create a sqlite databse for the real time cloud dataset and importy the csvs
 real_time_cloud_db:
 	uv run sqlite-utils create-database cloud_regions.db
 	uv run sqlite-utils insert cloud_regions.db cloud_regions_metadata ./cloud_region_metadata.csv --csv -d
-	uv run sqlite-utils insert cloud_regions.db cloud_regions_metadata_dev ./cloud_region_metadata_dev.csv --csv -d
-
 
 # download and uncompress the latest daily snapshot of the green domains dataset
-daily_snapshot: downloaded_snapshot 
+daily_snapshot: downloaded_snapshot
 	gunzip ./daily_snapshot.db.gz
 
 # download the latest daily green domains snapshot from object storage
