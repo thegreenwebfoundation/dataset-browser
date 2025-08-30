@@ -101,6 +101,13 @@ li.nav-logo img {
   margin-top: 1.5rem;
   width: 200px;
 }
+
+.deprecated-label {
+  background-color: #f7f0be;
+  padding-left: 0.5rem;
+  padding-right: 0.25rem;
+}
+
 body.table-greendomain li.nav-logo img {
   margin-left: 1rem;
   margin-top: 1rem;
