@@ -1,69 +1,58 @@
 {% extends "default:index.html" %}
-
 {% block extra_head %}
     <link rel="stylesheet" href="/static/css/overrides.css">
-{% endblock %}
-
-
+{% endblock extra_head %}
 {% include "partials/nav_menu.html" %}
-
-{% block title %} The Green Web Foundation - Dataset Browser {% endblock %}
-
-
+{% block title %}
+    The Green Web Foundation - Dataset Browser
+{% endblock title %}
 {% block content %}
-
-<div class="intro" style="max-width:60rem;">
-<h2>Welcome to the Green Web Foundation dataset browser.</h2>
-
-<p>
-
-<h3>Green domains dataset</h3>
-
-<p>Below is a browseable daily snapshot of all the green domains tracked in the Green Web Foundation database from the last twelve months, along with who they are hosted by, and when they were last updated.</p>
-
-<p>This data is updated every night at around midnight, and the tables are sortable, and searchable. If you know SQL, can run queries agains the data in-browser, and download the data for further analysis or use as as JSON, or in CSV format.</p>
-
-<p><a href="/daily_snapshot/greendomain">See the latest green domains snapshot</a>, or <a href="/about">learn more about the data</a>.
-
-<p><strong>Licensing</strong>: This data is licensed under the permissive <a href="https://opendatacommons.org/licenses/odbl/summary/">Open Data Commons Open Database License</a> - in short, you are welcome to share it, create new works from it and adapt it, as long as you provide attribution, and share under similar terms.</p>
-
-
-<hr/ >
-
-<h3>Real time cloud dataset</h3>
-
-<p>Since 2023, The Green Web Foundation has been a member of the <a href="https://github.com/Green-Software-Foundation/real-time-cloud/">Green Software Foundation Real Time Cloud working group</a>, a project that has set out to define consistent, standard ways to report the carbon intensity of the computing hours sold by large cloud providers.</p>
-
-<p>We have republished the key dataset created by the working group,
-the <em>Real Time Cloud Metadata</em> dataset, here on this site, in a form where it can be easily queried, linked to, and downloaded.</p>
-
-<p>See <a href="https://github.com/Green-Software-Foundation/real-time-cloud/blob/main/Cloud_Region_Metadata_specification.md">this link to documentation on the main project website</a> to understand what each column in the dataset means, and how it was created.</p>
-
-<p><a href="/cloud_regions/cloud_regions_metadata/">See the latest (v1.0) snapshot of the real time cloud metadata dataset</a>
-
-<p><strong>Licensing</strong>:
-
-<div class="gsf-license">
-
-<p>The files used to create the Real Time Cloud datasets are licensed under the MIT license.</p>
-
-<p>Copyright (c) 2021 Joint Development Foundation Projects, LLC, GSF Series and its contributors</p>
-
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-
-</div>
-
-
-
-
-</div>
-
-{% block description_source_license %}{% include "_description_source_license.html" %}{% endblock %}
-
-
-
-{% endblock %}
+    <div class="intro" style="max-width:60rem;">
+        <h2>Welcome to the Green Web Foundation dataset browser.</h2>
+        <h3>Green domains dataset</h3>
+        <p>
+            Below is a browseable daily snapshot of all the green domains tracked in the Green Web Foundation database from the last twelve months, along with who they are hosted by, and when they were last updated.
+        </p>
+        <p>
+            This data is updated every night at around midnight, and the tables are sortable, and searchable. If you know SQL, can run queries agains the data in-browser, and download the data for further analysis or use as as JSON, or in CSV format.
+        </p>
+        <p>
+            <a href="/daily_snapshot/greendomain">See the latest green domains snapshot</a>, or <a href="/about">learn more about the data</a>.
+        </p>
+        <p>
+            <strong>Licensing</strong>: This data is licensed under the permissive <a href="https://opendatacommons.org/licenses/odbl/summary/">Open Data Commons Open Database License</a> - in short, you are welcome to share it, create new works from it and adapt it, as long as you provide attribution, and share under similar terms.
+        </p>
+        <hr />
+        <h3>Real time cloud dataset</h3>
+        <p>
+            Since 2023, The Green Web Foundation has been a member of the <a href="https://github.com/Green-Software-Foundation/real-time-cloud/">Green Software Foundation Real Time Cloud working group</a>, a project that has set out to define consistent, standard ways to report the carbon intensity of the computing hours sold by large cloud providers.
+        </p>
+        <p>
+            We have republished the key dataset created by the working group,
+            the <em>Real Time Cloud Metadata</em> dataset, here on this site, in a form where it can be easily queried, linked to, and downloaded.
+        </p>
+        <p>
+            See <a href="https://github.com/Green-Software-Foundation/real-time-cloud/blob/main/Cloud_Region_Metadata_specification.md">this link to documentation on the main project website</a> to understand what each column in the dataset means, and how it was created.
+        </p>
+        <p>
+            <a href="/cloud_regions/cloud_regions_metadata/">See the latest (v1.0) snapshot of the real time cloud metadata dataset</a>
+        </p>
+        <strong>Licensing</strong>:
+        <div class="gsf-license">
+            <p>The files used to create the Real Time Cloud datasets are licensed under the MIT license.</p>
+            <p>Copyright (c) 2021 Joint Development Foundation Projects, LLC, GSF Series and its contributors</p>
+            <p>
+                Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+            </p>
+            <p>
+                The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+            </p>
+            <p>
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </p>
+        </div>
+    </div>
+    {% block description_source_license %}
+        {% include "_description_source_license.html" %}
+    {% endblock description_source_license %}
+{% endblock content %}

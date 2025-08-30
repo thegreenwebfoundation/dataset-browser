@@ -1,112 +1,147 @@
+<head>
+  <link rel="stylesheet" href="/static/css/overrides.css" />
+  <title>The Green Web Foundation - Dataset Browser - About</title>
+</head>
+
+<body>
+
+  {% include "partials/nav_menu.html" %}
+
+  <style>
+    .intro,
+    .intro p {
+      font-size: 1.3rem;
+      line-height: 1.6;
+    }
+
+    .intro li {
+      margin: 1rem;
+      font-size: 1.2rem;
+    }
+
+    tbody td {
+      padding: 0.5rem;
+    }
+  </style>
 
 
-{% block extra_head %}
-<link rel="stylesheet" href="/static/css/overrides.css">
-{% endblock %}
+  <main class="intro">
 
+    <h2 id="working-with-the-green-web-open-datasets">Working with the Green Web Open Datasets</h2>
+    <p>The Green Web Foundation regularly publishes a dataset of green domain names, and who hosts them. We refer to
+      this as the <em>green domains</em> dataset. </p>
+    <p>This data closely follows the data available over our Green Web check API, and generally speaking, analysis you
+      might use the Green Web check API for, you can use the published datasets for, without needing to hit the API for
+      each check.</p>
+    <h3 id="understanding-the-dataset">Understanding the Green Domains dataset</h3>
+    <p>Every check of a website in the The Green Web Foundation platform is recorded in a table called
+      <em>greenchecks</em>. As of Feburary 2025, this table is more than 5 billion rows long, so is rather unwieldy to
+      work with.
+    </p>
+    <p>For this reason, the dataset we publish contains a single smaller table, <code>greendomains</code>, listing the
+      domains that have shown up as 'green' in the last twelve months since the snapshot was taken.</p>
 
-{% include "partials/nav_menu.html" %}
+    <p>The columns for the table are documented below: </p>
 
-<style>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>the id of the last check</td>
+        </tr>
+        <tr>
+          <td><code>url</code></td>
+          <td>the domain checked</td>
+        </tr>
+        <tr>
+          <td><code>hosted_by</code></td>
+          <td>the organisation hosting this site</td>
+        </tr>
+        <tr>
+          <td><code>hosted_by_website</code></td>
+          <td>the website of the company providing the hosting for this site</td>
+        </tr>
+        <tr>
+          <td><code>partner</code></td>
+          <td><span style="background-color: #f7f0be;padding-left: 0.5rem;padding-right: 0.25rem;">Deprecated:</span>
+            a status depending on whether domain belongs to one of the web green web partner organisations</td>
+        </tr>
+        <tr>
+          <td><code>green</code></td>
+          <td>Does this is count as a green domain? 1 for yes, 0 for no. See our <a
+              href="https://greenweb.readthedocs.io/en/latest/how-we-check-for-green.html">documentation page</a> for
+            more details on basis we use to decide on counting a domain as "green"</td>
+        </tr>
+        <tr>
+          <td><code>hosted_by_id</code></td>
+          <td>the id of the hosting company</td>
+        </tr>
+        <tr>
+          <td><code>modified</code></td>
+          <td>the time and date of the last check of this domain</td>
+        </tr>
+        <tr>
+          <td><code>created</code></td>
+          <td>the time and date when this domain was created in this system, taking into account the 12 month rolling
+            cut-off window of this snapshot. If a domain was first seen more than 12 months earlier than the date of the
+            snapshot, but has not had a check run against it the last 12 months that showing as green, it will not be
+            included in this snapshot.</td>
+        </tr>
+      </tbody>
+    </table>
 
-.intro,
-.intro p {
-  font-size:1.3rem;
-  line-height:1.6;
-}
+    <small><em>Note: Columns marked as "deprecated" will be removed in future versions of the dataset. They may not be
+        available after October 2025.</em></small>
 
-.intro li {
-  margin:1rem;
-  font-size:1.2rem;
-}
+    <h3 id="example-uses-of-this-dataset">Example uses of this dataset</h3>
+    <p>Because this data provides similar data to the greencheck API, this dataset can work like an offline cache, where
+      making API calls for each check either would either be too slow, or you want to avoid making network requests
+      against Green Web servers that disclose which domains are being checked. We've listed some examples of usage
+      below:</p>
+    <ul>
+      <li><em>running local checks for privacy</em> - a build of the <a
+          href="https://github.com/thegreenwebfoundation/searx/">privacy protecting search engine searx</a>, uses this,
+        to avoid needing to leak information</li>
+      <li><em>checking domains as part of development workflow</em> - tools which consume the green web foundation&#39;s
+        green check API, like <a
+          href="https://www.sitespeed.io/documentation/sitespeed.io/sustainable/">Sitespeed.io</a>, or <a
+          href="websitecarbon.com/">Website Carbon</a>, can use this to avoid being reliant on the Green Web API for
+        running checks</li>
+      <li><em>running analysis to understand how the proportion of web running on "greener" hosting changes over
+          time</em> - The HTTP Archive Web Almanac uses this dataset in <a
+          href="https://almanac.httparchive.org/en/2024/sustainability">its bi-annual "State of the Web" report
+          sustainability section</a>, presenting various visualations based on this data.</li>
+    </ul>
 
-tbody td {
-  padding:0.5rem;
-}
-</style>
+    <h3>Running custom queries on the Green Web Foundation datasets</h3>
 
+    <p>This dataset browser is based on Simon Willison's open source Datasette project. This means that if you know SQL,
+      it allows you to link to the results of running custom SQL queries against the latest green domains snapshot. <a
+        href="https://docs.datasette.io/en/latest/sql_queries.html">See more in the relevant datasette
+        documentation.</a></p>
 
-<main class="intro">
+    <p>There is a timeout limit, so if you need to do complicated, expensive queries against a specific snapshot, we
+      recommend downloading the snapshot to work on your own computer or infrastructure.</p>
 
-<h2 id="working-with-the-green-web-open-datasets">Working with the Green Web Open Datasets</h2>
-<p>The Green Web Foundation regularly publishes a dataset of green domain names, and who hosts them. We refer to this as the <em>green domains</em> dataset. </p>
-<p>This data closely follows the data available over our Green Web check API, and generally speaking, analysis you might use the Green Web check API for, you can use the published datasets for, without needing to hit the API for each check.</p>
-<h3 id="understanding-the-dataset">Understanding the Green Domains dataset</h3>
-<p>Every check of a website in the The Green Web Foundation platform is recorded in a table called <em>greenchecks</em>. As of Feburary 2025, this table is more than 5 billion rows long, so is rather unwieldy to work with.</p>
-<p>For this reason, the dataset we publish contains a single smaller table, <code>greendomains</code>, listing the domains that have shown up as 'green' in the last twelve months since the snapshot was taken.
+    <h3 id="licensing-of-the-data">Licensing of the data</h3>
+    <p>This dataset is released under the <a href="https://opendatacommons.org/licenses/odbl/summary/index.html">Open
+        Database Licence</a>.</p>
+    <h3 id="getting-support-with-using-the-the-green-web-foundation-datasets">Getting support with using the the Green
+      Web Foundation datasets</h3>
+    <p>We provide limited, free support for using the Green Web Datasets we publish, and are happy to provide advice or
+      answer questions about this data if you want to use it in classes or research.</p>
+    <p>If you&#39;re interested in further analysis about the shift of the web away from fossil fuels, the Green Web
+      Foundation has data going back to 2009, and we&#39;re happy to collaborations. Get in touch at <a
+        href="mailto:hello@thegreenwebfoundation">hello@thegreenwebfoundation</a>, or <a
+        href="https://www.thegreenwebfoundation.org/green-web-datasets/">visit our contact page for more ways to reach
+        us.</a></p>
 
-<p>The columns for the table are documented below: </p>
+  </main>
 
-<table>
-<thead>
-<tr>
-<th>Column</th>
-<th >Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>id<code></td>
-<td >the id of the last check</td>
-</tr>
-<tr>
-<td><code>url</code></td>
-<td >the domain checked</td>
-</tr>
-<tr>
-<td><code>hosted_by</code></td>
-<td >the organisation hosting this site</td>
-</tr>
-<tr>
-<td><code>hosted_by_website</code></td>
-<td >the website of the company providing the hosting for this site</td>
-</tr>
-<tr>
-<td><code>partner</code></td>
-<td ><span style="background-color=red;background-color: #f7f0be;padding-left: 0.5rem;padding-right: 0.25rem;">Deprecated:</span> a status depending on whether domain belongs to one of the web green web partner organisations</td>
-</tr>
-<tr>
-<td><code>green</code></td>
-<td >Does this is count as a green domain? 1 for yes, 0 for no. See our <a href="https://greenweb.readthedocs.io/en/latest/how-we-check-for-green.html">documentation page for more details on basis we use to decide on counting a domain as "green"</td>
-</tr>
-<tr>
-<td><code>hosted_by_id</code></td>
-<td>the id of the hosting company</td>
-</tr>
-<tr>
-<td><code>modified</code></td>
-<td>the time and date of the last check of this domain</td>
-</tr>
-<tr>
-<td><code>created</code></td>
-<td>the time and date when this domain was created in this system, taking into account the 12 month rolling cut-off window of this snapshot. If a domain was first seen more than 12 months earlier than the date of the snapshot, but has not had a check run against it the last 12 months that showing as green, it will not be included in this snapshot.</td>
-</tr>
-</tbody>
-</table>
-
-<small><em>Note: Columns marked as "deprecated" will be removed in future versions of the dataset. They may not be available after October 2025.</em></small>
-
-
-<h3 id="example-uses-of-this-dataset">Example uses of this dataset</h3>
-<p>Because this data provides similar data to the greencheck API, this dataset can work like an offline cache, where making API calls for each check either would either be too slow, or you want to avoid making network requests against Green Web servers that disclose which domains are being checked. We've listed some examples of usage below:</p>
-<ul>
-<li><em>running local checks for privacy</em> - a build of the <a href="https://github.com/thegreenwebfoundation/searx/">privacy protecting search engine searx</a>, uses this, to avoid needing to leak information</li>
-<li><em>checking domains as part of development workflow</em> - tools which consume the green web foundation&#39;s green check API, like <a href="https://www.sitespeed.io/documentation/sitespeed.io/sustainable/">Sitespeed.io</a>, or <a href="websitecarbon.com/">Website Carbon</a>, can use this to avoid being reliant on the Green Web API for running checks</li>
-<li><em>running analysis to understand how the proportion of web running on "greener" hosting changes over time</em> - The HTTP Archive Web Almanac uses this dataset in <a href="https://almanac.httparchive.org/en/2024/sustainability">its bi-annual "State of the Web" report sustainability section</a>, presenting various visualations based on this data.</li>
-</ul>
-
-<h3>Running custom queries on the Green Web Foundation datasets</h3>
-
-<p>This dataset browser is based on Simon Willison's open source Datasette project. This means that if you know SQL, it allows you to link to the results of running custom SQL queries against the latest green domains snapshot. <a href="https://docs.datasette.io/en/latest/sql_queries.html">See more in the relevant datasette documentation.</a>
-
-<p>There is a timeout limit, so if you need to do complicated, expensive queries against a specific snapshot, we recommend downloading the snapshot to work on your own computer or infrastructure.</p>
-
-<h3 id="licensing-of-the-data">Licensing of the data</h3>
-<p>This dataset is released under the <a href="https://opendatacommons.org/licenses/odbl/summary/index.html">Open Database Licence</a>.</p>
-<h3 id="getting-support-with-using-the-the-green-web-foundation-datasets">Getting support with using the the Green Web Foundation datasets</h3>
-<p>We provide limited, free support for using the Green Web Datasets we publish, and are happy to provide advice or answer questions about this data if you want to use it in classes or research.</p>
-<p>If you&#39;re interested in further analysis about the shift of the web away from fossil fuels, the Green Web Foundation has data going back to 2009, and we&#39;re happy to collaborations. Get in touch at <a href="mailto:hello@thegreenwebfoundation">hello@thegreenwebfoundation<a/>, or <a href="https://www.thegreenwebfoundation.org/green-web-datasets/">visit our contact page for more ways to reach us<a/></p>
-
-
-</main>
-
+</body>
