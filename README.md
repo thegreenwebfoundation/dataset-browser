@@ -6,19 +6,23 @@ This is a lightly modified  of the fantastic Datasette project, led by Simon Wil
 
 ## Installation
 
-This project used pipenv by default, but
+This project uses uv by default, meaning dependencies are installe dy default when you use the supported commands listed in "Usage" and "Deployment". 
 
-To install it, create a virtual environment, and install the required libraries
+However, if you prefer, it should still work using python's default package manager.
+
+To install it, create a virtual environment, and install the required libraries, and then run datasette.
 
 ```
-python -m venv venv
-pip install pipenv
-source venv/bin/activate
+python -m venv ven
+python -m pip install
+source .venv/bin/activate
 
-pipenv install
+datasette . -h 0.0.0.0
 ```
 
 ### Usage
+
+This project uses [just](https://just.systems), for automating common tasks. To run the dataset locally, type just to see the options available, and then use the `serve` command to run a local server.
 
 ```
 just serve
