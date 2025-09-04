@@ -2,11 +2,11 @@
 
 This is source code for the green web foundation datasets browser, visible at https://datasets.thegreenwebfoundation.org.
 
-This is a lightly modified  of the fantastic Datasette project, led by Simon Willison. If you have data you are interested in publishing, it's a fantastic tool.
+This is a lightly modified of the [fantastic Datasette project](https://datasette.io), led by [Simon Willison](https://simonwillison.net). If you have data you are interested in publishing, it's a fantastic tool.
 
 ## Installation
 
-This project uses uv by default, meaning dependencies are installe dy default when you use the supported commands listed in "Usage" and "Deployment". 
+This project uses uv by default, meaning dependencies are installed by default when you use the supported commands listed in "Usage" and "Deployment". 
 
 However, if you prefer, it should still work using python's default package manager.
 
@@ -17,6 +17,7 @@ python -m venv ven
 python -m pip install
 source .venv/bin/activate
 
+# run the datasette binary in the virtual environment, listing for connections on all interfaces
 datasette . -h 0.0.0.0
 ```
 
