@@ -5,5 +5,12 @@
 
 # calling `exec` here means that systemd sends a KILL command just
 # allowing for a graceful shutdown or reboot
-exec .venv/bin/datasette . -h 0.0.0.0
+#
+# Using gunicorn for proper access logging and production readiness.
+# --forwarded-allow-ips handles X-Forwarded-For from Caddy reverse proxy
+exec .venv/bin/datasette . -h 0.0.0.0 -p {{ app_port }} \
+    --gunicorn \
+    --access-logfile - \
+    --error-logfile - \
+    -- --forwarded-allow-ips='127.0.0.1'
 
