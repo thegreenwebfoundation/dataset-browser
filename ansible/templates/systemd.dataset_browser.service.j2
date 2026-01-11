@@ -16,6 +16,14 @@ User={{ service_user }}
 Group={{ service_user }}
 KillMode=control-group
 KillSignal=SIGTERM
-Restart=on-failure
+
+# Resource limits
+MemoryHigh=800M
+MemoryMax=1G
+
+# Restart configuration
+Restart=always
+RestartSec=10s
+
 [Install]
 WantedBy=multi-user.target
