@@ -8,9 +8,4 @@
 #
 # Using gunicorn for proper access logging and production readiness.
 # --forwarded-allow-ips handles X-Forwarded-For from Caddy reverse proxy
-exec .venv/bin/datasette . -h 0.0.0.0 -p {{ app_port }} \
-    --gunicorn \
-    --access-logfile - \
-    --error-logfile - \
-    -- --forwarded-allow-ips='127.0.0.1'
-
+exec .venv/bin/datasette . -h 0.0.0.0 -p {{ app_port }}
