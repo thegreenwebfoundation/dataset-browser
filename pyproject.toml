@@ -15,8 +15,9 @@ dependencies = [
 include = ["tgwf_datasette*"]
 exclude = ["static*", "ansible*", "templates*", "notebooks*"]
 
-[tool.uv]
-dev-dependencies = [
+
+[dependency-groups]
+dev = [
     "ipdb>=0.13.13",
     "mypy>=1.12.0",
     "pytest-watch>=4.2.0",
