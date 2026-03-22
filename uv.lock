@@ -320,10 +320,9 @@ wheels = [
 [[package]]
 name = "dataset-browser"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "datasette" },
-    { name = "datasette-gunicorn" },
     { name = "datasette-pretty-traces", version = "0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "datasette-pretty-traces", version = "0.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "duckdb" },
@@ -344,7 +343,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "datasette" },
-    { name = "datasette-gunicorn" },
     { name = "datasette-pretty-traces" },
     { name = "duckdb", specifier = ">=1.1.3" },
     { name = "sqlite-utils" },
@@ -390,19 +388,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/db/94/e6408997861e9de3ec61fb8107efe9eaf70f765ad2cd4e20b552dd340899/datasette-0.65.1.tar.gz", hash = "sha256:d8be37ae6dafbfd8e510d49c0dc0fc6696081614d048a507eed86dd2ae433223", size = 409411, upload-time = "2024-11-29T01:18:13.219Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/08/f7/fc15b9ddc7a2cafe546f0e2696d71940d7604a128e2f903e98238c3435f7/datasette-0.65.1-py3-none-any.whl", hash = "sha256:ba7adf717ddcc24a2a8ac57890fffd384a2ebb909b342e4f731ba09eba764305", size = 396428, upload-time = "2024-11-29T01:18:11.269Z" },
-]
-
-[[package]]
-name = "datasette-gunicorn"
-version = "0.1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "datasette" },
-    { name = "gunicorn" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/ea/a930415f1c3b4272a8ace361acabb467288d0207b42bd5caf6c5da2fa8d7/datasette-gunicorn-0.1.1.tar.gz", hash = "sha256:3dabced1e00ed60e0cb85133f04836a355e9ce0ced9fc174a229b5deb27de27e", size = 8105, upload-time = "2022-12-18T06:45:03.249Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/cc/a77137b30be3552b2ebfda711570c648ba6e7f842f1a202420b6747d21f9/datasette_gunicorn-0.1.1-py3-none-any.whl", hash = "sha256:54a66d345713345be3ed791280f104f31ea7e86f243962cfb76df8aa071ad8d9", size = 8590, upload-time = "2022-12-18T06:45:01.862Z" },
 ]
 
 [[package]]
@@ -549,18 +534,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/82/99/b4de7e39e8eaf8207ba1a8fa2241dd98b2ba72ae6e16960d8351736d8702/flexparser-0.4.tar.gz", hash = "sha256:266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2", size = 31799, upload-time = "2024-11-07T02:00:56.249Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/5e/3be305568fe5f34448807976dc82fc151d76c3e0e03958f34770286278c1/flexparser-0.4-py3-none-any.whl", hash = "sha256:3738b456192dcb3e15620f324c447721023c0293f6af9955b481e91d00179846", size = 27625, upload-time = "2024-11-07T02:00:54.523Z" },
-]
-
-[[package]]
-name = "gunicorn"
-version = "23.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "packaging" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031, upload-time = "2024-08-10T20:25:27.378Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029, upload-time = "2024-08-10T20:25:24.996Z" },
 ]
 
 [[package]]
