@@ -69,7 +69,7 @@
       when: install_system_dependencies is true
       tags: [uv-install]
 
-    - name: Install uv for managing python dependencies
+    - name: Install uv for managing python dependencies # noqa
       ansible.builtin.shell: "bash /tmp/uv.install.sh"
       args:
         creates: "/home/deploy/.cargo/bin/uv"
