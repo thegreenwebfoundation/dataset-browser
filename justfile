@@ -35,10 +35,10 @@ all_dataset_dbs: daily_snapshot real_time_cloud_csvs real_time_cloud_db
 
 # fetch  the latest real time cloud dataset snapshots from object storage
 real_time_cloud_csvs:
-	wget https://github.com/Green-Software-Foundation/real-time-cloud/archive/refs/tags/v1.0.tar.gz -O /tmp/real-time-cloud.tar.gz
-	mkdir -p /tmp/real-time-cloud
-	tar -xzvf /tmp/real-time-cloud.tar.gz --strip-components 1 -C /tmp/real-time-cloud
-	mv /tmp/real-time-cloud/Cloud_Region_Metadata.csv cloud_region_metadata.csv
+	# Fetching using the latest csv snapshot from the 'dev' branch of the real time cloud dataset repo.	
+	# This gives us the latest data, because there is still a noticeable delay between data being updated and
+	# the GSF steering council ratifying a given release each time.
+	wget -O cloud_region_metadata.csv https://raw.githubusercontent.com/Green-Software-Foundation/real-time-cloud/refs/heads/Dev/Cloud_Region_Metadata.csv
 
 # create a sqlite databse for the real time cloud dataset and importy the csvs
 real_time_cloud_db:
