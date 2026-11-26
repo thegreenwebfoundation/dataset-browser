@@ -40,8 +40,15 @@ real_time_cloud_csvs:
 	# the GSF steering council ratifying a given release each time.
 	wget -O cloud_region_metadata.csv https://raw.githubusercontent.com/Green-Software-Foundation/real-time-cloud/refs/heads/Dev/Cloud_Region_Metadata.csv
 
-# create a sqlite databse for the real time cloud dataset and importy the csvs
-real_time_cloud_db:
+# remove the real time cloud sqlite database before a rebuild. sqlite-utils
+# insert appends rows, so rebuilding against an existing database would
+# silently duplicate everything. Only touches the real time cloud dataset:
+# leaves the green domains daily snapshot alone, needs no MinIO credentials.
+cleared_real_time_cloud_db:
+	rm -f ./cloud_regions.db
+
+# create a sqlite database for the real time cloud dataset and import the csvs
+real_time_cloud_db: cleared_real_time_cloud_db
 	uv run sqlite-utils create-database cloud_regions.db
 	uv run sqlite-utils insert cloud_regions.db cloud_regions_metadata ./cloud_region_metadata.csv --csv -d
 
