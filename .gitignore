@@ -1,3 +1,14 @@
 .env*
 .vscode
 __pycache__/
+
+# local virtualenvs and tool caches
+.venv/
+.mypy_cache/
+.pytest_cache/
+
+# generated dataset artifacts (fetched/rebuilt by the justfile recipes)
+*.db
+*.db.gz
+*.csv
+*.parquet
